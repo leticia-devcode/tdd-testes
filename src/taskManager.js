@@ -43,16 +43,20 @@ export function createTask(title, priority = 'medium') {
 }
 
 
-export function addTask(tasks, title) {
+
+ export function addTask(tasks, title) {
   if (!validateTitle(title)) {
-    throw new Error(
-      'Título inválido: deve ser uma string com pelo menos 3 caracteres.'
-    );
+    throw new Error('Título inválido: deve ser uma string com pelo menos 3 caracteres.');
+  }
+   if (isDuplicate(tasks, title)) {
+    throw new Error('Tarefa duplicada.');
   }
 
   const newTask = createTask(title);
   return [...tasks, newTask];
 }
+
+
 
 // ------------------------------------------------------------
 // Alteração de estado
@@ -111,4 +115,10 @@ export function validatePriority(priority) {
 
 export function filterByPriority(tasks, priority) {
   return tasks.filter(t => t.priority === priority);
+}
+
+export function isDuplicate(tasks, title) {
+  if (!title) return false;
+  const normalized = title.trim().toLowerCase();
+  return tasks.some(t => t.title.toLowerCase() === normalized);
 }
