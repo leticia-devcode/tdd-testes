@@ -13,6 +13,7 @@ import {
    validatePriority,
   filterByPriority,
    isDuplicate,
+   sortTasks,
 
 } from '../src/taskManager.js';
 
@@ -423,5 +424,28 @@ describe('isDuplicate', () => {
     expect(isDuplicate(tasks, 'estudar')).toBe(true);
     expect(isDuplicate(tasks, '  ESTUDAR  ')).toBe(true);
     expect(isDuplicate(tasks, 'Trabalhar')).toBe(false);
+  });
+});
+
+describe('sortTasks', () => {
+  it('deve ordenar pendentes primeiro e retornar NOVO array', () => {
+    resetId();
+    let tasks = [];
+    tasks = addTask(tasks, 'T1');
+    tasks = addTask(tasks, 'T2');
+    tasks = addTask(tasks, 'T3');
+    
+    // Conclui a T1
+    tasks[0] = toggleTask(tasks[0]); 
+
+    const sorted = sortTasks(tasks);
+
+    // T2 e T3 (pendentes) devem vir antes da T1 (concluída)
+    expect(sorted[0].title).toBe('T2');
+    expect(sorted[1].title).toBe('T3');
+    expect(sorted[2].title).toBe('T1');
+    
+    // Imutabilidade
+    expect(sorted).not.toBe(tasks);
   });
 });
