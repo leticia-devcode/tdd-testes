@@ -14,6 +14,7 @@ import {
   filterByPriority,
    isDuplicate,
    sortTasks,
+   searchTasks,
 
 } from '../src/taskManager.js';
 
@@ -447,5 +448,36 @@ describe('sortTasks', () => {
     
     // Imutabilidade
     expect(sorted).not.toBe(tasks);
+  });
+});
+
+
+describe('searchTasks', () => {
+  let tasks;
+
+  beforeEach(() => {
+    resetId();
+    tasks = [
+      createTask('Estudar Vitest'),
+      createTask('Testar a API'),
+      createTask('Limpar a casa')
+    ];
+  });
+
+  it('deve encontrar tarefas por texto ignorando case', () => {
+    const result1 = searchTasks(tasks, 'est');
+    expect(result1).toHaveLength(2); // 'Estudar' e 'Testar'
+
+    const result2 = searchTasks(tasks, 'LIMPAR');
+    expect(result2).toHaveLength(1);
+    expect(result2[0].title).toBe('Limpar a casa');
+  });
+
+  it('deve retornar array vazio se não encontrar nada', () => {
+    expect(searchTasks(tasks, 'xyz')).toHaveLength(0);
+  });
+
+  it('deve retornar todas se a busca for vazia', () => {
+    expect(searchTasks(tasks, '')).toHaveLength(3);
   });
 });
