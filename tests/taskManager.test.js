@@ -10,6 +10,8 @@ import {
   countCompleted,
   countPending,
   resetId,
+   validatePriority,
+  filterByPriority,
 } from '../src/taskManager.js';
 
 // ============================================================
@@ -95,6 +97,17 @@ describe('createTask', () => {
 
     expect(task.title).toBe('Título com espaços');
   });
+
+   it('deve criar tarefa com prioridade "high"', () => {
+    const task = createTask('Tarefa Urgente', 'high');
+    expect(task.priority).toBe('high');
+  });
+
+  it('deve criar tarefa com prioridade "medium" por padrão', () => {
+    const task = createTask('Tarefa Normal');
+    expect(task.priority).toBe('medium');
+  });
+
 });
 
 // ============================================================
@@ -360,5 +373,34 @@ describe('countPending', () => {
     const allCompleted = tasks.map((t) => ({ ...t, completed: true }));
 
     expect(countPending(allCompleted)).toBe(0);
+  });
+});
+
+describe('validatePriority', () => {
+  it('deve retornar true para prioridades válidas', () => {
+    expect(validatePriority('low')).toBe(true);
+    expect(validatePriority('medium')).toBe(true);
+    expect(validatePriority('high')).toBe(true);
+  });
+
+  it('deve retornar false para prioridade inválida', () => {
+    expect(validatePriority('urgente')).toBe(false);
+    expect(validatePriority('')).toBe(false);
+  });
+});
+
+describe('filterByPriority', () => {
+  it('deve retornar apenas as tarefas da prioridade informada', () => {
+    resetId();
+    let tasks = [];
+    tasks.push(createTask('T1', 'high'));
+    tasks.push(createTask('T2', 'low'));
+    tasks.push(createTask('T3', 'high'));
+
+    const result = filterByPriority(tasks, 'high');
+    
+    expect(result).toHaveLength(2);
+    expect(result[0].title).toBe('T1');
+    expect(result[1].title).toBe('T3');
   });
 });
