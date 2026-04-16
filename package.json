@@ -1,1 +1,1 @@
-{"name":"tdd-testes","version":"1.0.0","description":"","type":"module","scripts":{"test":"vitest run","test:watch":"vitest","coverage":"vitest run --coverage"},"keywords":[],"author":"","license":"ISC","devDependencies":{"@vitest/ui":"^4.1.4","vitest":"^4.1.4"}}
+{"name":"tdd-testes","version":"1.0.0","description":"","type":"module","scripts":{"test":"vitest run","test:watch":"vitest","coverage":"vitest run --coverage"},"keywords":[],"author":"","license":"ISC","devDependencies":{"@vitest/coverage-v8":"^4.1.4","@vitest/ui":"^4.1.4","vitest":"^4.1.4"}}
